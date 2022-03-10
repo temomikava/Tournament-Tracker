@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TrackerLibrary;
+using TrackerLibrary.DataAccess;
+using TrackerLibrary.Models;
 
 namespace TrackerUI
 {
@@ -28,10 +30,8 @@ namespace TrackerUI
                 model.PrizeAmount=decimal.Parse(prizeAmountValue.Text);
                 model.PrizePercentage=double.Parse(prizePercentageValue.Text);
 
-                foreach(IDataConnection db in GlobalConfig.Connections)
-                {
-                    db.CreatePrize(model);
-                }
+                GlobalConfig.Connection.CreatePrize(model);
+
                 MessageBox.Show("Done");
                 placeNumberValue.Text = "";
                 placeNameValue.Text = "";
@@ -44,39 +44,35 @@ namespace TrackerUI
             }
         }
         private bool ValidateForm()
-        {
-            bool output = true;
+        {           
             int placeNumber = 0;
             bool placeNumberValidation=int.TryParse(placeNumberValue.Text, out placeNumber);
-            if (!placeNumberValidation)
+            if (!placeNumberValidation||
+                placeNumber<1         ||
+                placeNumberValue.Text.Length==0)
+                
             {
-                output = false;
+                return false;
             }
-            if (placeNumber<1)
-            {
-                output=false;
-            }
-            if (placeNumberValue.Text.Length==0)
-            {
-                output = false;
-            }
+            
             decimal prizeAmount = 0;
             double prizePercentage = 0;
             bool prizeAmountValidation=decimal.TryParse(prizeAmountValue.Text, out prizeAmount);
             bool prizePercentageValidation=double.TryParse(prizePercentageValue.Text, out prizePercentage);
             if (!prizeAmountValidation || !prizePercentageValidation)
             {
-                output = false;
+                return false;
             }
-            if (prizeAmount<=0 && prizePercentage<=0)
+            if (prizeAmount<0 || (prizeAmount==0 && prizePercentage!=0))
             {
-                output = false;
+                return false;
             }
             if (prizePercentage<0 || prizePercentage>100)
             {
-                output = false;
+                return false;
+                
             }
-            return output;
+            return true;
         }
     }
 }
