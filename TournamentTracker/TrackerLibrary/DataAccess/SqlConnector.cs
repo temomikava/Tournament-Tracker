@@ -15,18 +15,30 @@ namespace TrackerLibrary.DataAccess
 {
     public class SqlConnector : IDataConnection
     {
-        //    @PlaceNumber int,
-        //@PlaceName nvarchar(50),
-        //@PrizeAmount money,
-        //   @PrizePercentage float,
-        //@ID int=0 output
-        //TODO - Make the CreatePrize method actually save to the database.
+        string connectionString = "Server=DESKTOP-0LBLIAV;Database=Tournaments;Trusted_Connection=True;";
+
+        public PersonModel CreatePerson(PersonModel model)
+        {
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@FirstName", model.FirstName);
+                p.Add("@LastName", model.LastName);
+                p.Add("@EmailAddress", model.EmailAddress);
+                p.Add("@CellphoneNumber", model.CellphoneNumber);
+                p.Add("ID", 0, DbType.Int32, direction: ParameterDirection.Output);
+
+                connection.Execute("spPeople_Insert", p, commandType: CommandType.StoredProcedure);
+                model.Id = p.Get<int>("@ID");
+                return model;
+            }
+        }
+
         /// <summary>
         /// Saves the new prize to the database.
         /// </summary>
         /// <param name="model">The prize information.</param>
         /// <returns>Prize information including the unique identifier</returns>
-        string connectionString = "Server=DESKTOP-0LBLIAV;Database=Tournaments;Trusted_Connection=True;";
 
         public PrizeModel CreatePrize(PrizeModel model)
         {

@@ -10,7 +10,22 @@ namespace TrackerLibrary.DataAccess
     public class TextConnector : IDataConnection
     {
         internal static string PrizesPath = @"C:\data\TournamentTracker\PrizeModels.csv";
-        //TODO - Wire up the CreatePrize method for text files.
+        internal static string PersonsPath = @"C:\data\TournamentTracker\PersonModels.csv";
+
+        public PersonModel CreatePerson(PersonModel model)
+        {
+            List<PersonModel> persons = PersonsPath.LoadFile().ConvertToPersonModels();
+            int currentId = 1;
+            if (persons.Count() > 0)
+            {
+                currentId = persons.OrderByDescending(x => x.Id).First().Id + 1;
+            }
+            model.Id = currentId;
+            persons.Add(model);
+            persons.SaveToPersonFile(PersonsPath);
+            return model;
+        }
+
         public PrizeModel CreatePrize(PrizeModel model)
         {
             //Load the text file and convert the text to List<PrizeModel>
