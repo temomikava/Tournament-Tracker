@@ -17,10 +17,7 @@ namespace TrackerLibrary.DataAccess.TextHelpers
     //Save the list<string> to the text file
     public static class TextConnectorProcessor
     {
-        public static string FullFilePath(this string fileName)
-        {
-            return $"{ConfigurationManager.AppSettings["filePath"]}\\{fileName}";
-        }
+        
         public static List<string> LoadFile(this string file)
         {
             if (!File.Exists(file))
@@ -45,14 +42,14 @@ namespace TrackerLibrary.DataAccess.TextHelpers
             }
             return output;
         }
-        public static void SaveToPrizeFile(this List<PrizeModel> models, string fileName)
+        public static void SaveToPrizeFile(this List<PrizeModel> models, string path)
         {
             List<string>lines=new List<string>();
             foreach (PrizeModel p in models)
             {
                 lines.Add($"{p.Id },{ p.PlaceNumber },{ p.PlaceName },{ p.PrizeAmount },{ p.PrizePercentage}");
             }
-            File.WriteAllLines(fileName.FullFilePath(), lines);
+            File.WriteAllLines(TextConnector.PrizesPath, lines);
         }
 
     }

@@ -26,9 +26,9 @@ namespace TrackerLibrary
                 Connection=text; 
             }           
         }
-        public static string CnnString()
-        {
-            return ConfigurationManager.ConnectionStrings["Tournaments"].ConnectionString;
-        }
+        //public static string CnnString()
+        //{
+        //    return ConfigurationManager.ConnectionStrings["Tournaments"].ConnectionString;
+        //}
     }
 }
