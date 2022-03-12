@@ -26,7 +26,7 @@ namespace TrackerLibrary.DataAccess
                 p.Add("@LastName", model.LastName);
                 p.Add("@EmailAddress", model.EmailAddress);
                 p.Add("@CellphoneNumber", model.CellphoneNumber);
-                p.Add("ID", 0, DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("@ID", 0, DbType.Int32, direction: ParameterDirection.Output);
 
                 connection.Execute("spPeople_Insert", p, commandType: CommandType.StoredProcedure);
                 model.Id = p.Get<int>("@ID");
@@ -49,13 +49,33 @@ namespace TrackerLibrary.DataAccess
                 p.Add("@PlaceName", model.PlaceName);
                 p.Add("@PrizeAmount", model.PrizeAmount);
                 p.Add("@PrizePercentage", model.PrizePercentage);
-                p.Add("ID", 0, DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("@ID", 0, DbType.Int32, direction: ParameterDirection.Output);
 
                 connection.Execute("spPrizes_Insert", p, commandType: CommandType.StoredProcedure);
                 model.Id = p.Get<int>("@ID");
                 return model;
             }
             
+        }
+
+        public TeamModel CreateTeam(TeamModel model)
+        {
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                var p = new DynamicParameters();
+                p.Add("@TeamName", model.TeamName);
+                p.Add("@ID", 0, DbType.Int32, direction: ParameterDirection.Output);
+                connection.Execute("spTeams_Insert", p, commandType: CommandType.StoredProcedure);
+                model.Id = p.Get<int>("@ID");
+                foreach (PersonModel tm in model.TeamMembers)
+                {
+                    p = new DynamicParameters();
+                    p.Add("@TeamID", model.Id);
+                    p.Add("@PersonID", tm.Id);
+                    connection.Execute("spTeamMembers_Insert", p, commandType: CommandType.StoredProcedure);
+                }
+                return model;
+            }
         }
 
         public List<PersonModel> GetPerson_All()

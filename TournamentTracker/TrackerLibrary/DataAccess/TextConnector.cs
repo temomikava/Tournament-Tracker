@@ -11,6 +11,7 @@ namespace TrackerLibrary.DataAccess
     {
         internal static string PrizesPath = @"C:\data\TournamentTracker\PrizeModels.csv";
         internal static string PersonsPath = @"C:\data\TournamentTracker\PersonModels.csv";
+        internal static string TeamPath = @"C:\data\TournamentTracker\TeamModels.csv";
 
         public PersonModel CreatePerson(PersonModel model)
         {
@@ -44,6 +45,21 @@ namespace TrackerLibrary.DataAccess
             Prizes.SaveToPrizeFile(PrizesPath);
 
             return model;
+        }
+
+        public TeamModel CreateTeam(TeamModel model)
+        {
+            List<TeamModel> teams=TeamPath.LoadFile().ConvertToTeamModel();
+            int currentId = 1;
+            if (teams.Count() > 0)
+            {
+                currentId = teams.OrderByDescending(x => x.Id).First().Id + 1;
+            }
+            model.Id = currentId;
+            teams.Add(model);
+            teams.SaveToTeamFile(PersonsPath);
+            return model;
+
         }
 
         public List<PersonModel> GetPerson_All()
