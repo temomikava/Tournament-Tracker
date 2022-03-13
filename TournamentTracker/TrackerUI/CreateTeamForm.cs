@@ -54,7 +54,8 @@ namespace TrackerUI
                 p.CellphoneNumber = cellPhoneValue.Text;
 
                 p=GlobalConfig.Connection.CreatePerson(p);
-                selectedTeamMembers.Add(p);
+                availableTeamMembers.Add(p);
+                InitializeLists();
 
                 firstNameValue.Text = "";
                 lastNameValue.Text = "";

@@ -74,7 +74,7 @@ namespace TrackerUI
 
         public void TeamComplete(TeamModel model)
         {
-            selectedTeams.Add(model);
+            availableTeams.Add(model);
             InitializeLists();
         }
 
@@ -93,6 +93,26 @@ namespace TrackerUI
                 InitializeLists();
             }
             
+        }
+
+        private void createTournamentButton_Click(object sender, EventArgs e)
+        {
+            decimal fee = 0;
+            bool FeeAcceptablee = decimal.TryParse(entryFeeValue.Text, out fee);
+            if (!FeeAcceptablee)
+            {
+                MessageBox.Show("You need to enter a valid entry fee", 
+                    "Invalid Fee",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+            TournamentModel tm=new TournamentModel();
+            tm.TournamentName=tournamentNameValue.Text;
+            tm.EntryFee=fee;
+            tm.EnteredTeams = selectedTeams;
+            tm.Prizes = selectedPrizes;
+            GlobalConfig.Connection.CreateTournament(tm);
         }
     }
 }
