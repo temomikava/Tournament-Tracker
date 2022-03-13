@@ -9,10 +9,11 @@ namespace TrackerLibrary.DataAccess
 {
     public class TextConnector : IDataConnection
     {
-        internal static string PrizesPath = @"C:\data\TournamentTracker\PrizeModels.csv";
-        internal static string PersonsPath = @"C:\data\TournamentTracker\PersonModels.csv";
-        internal static string TeamPath = @"C:\data\TournamentTracker\TeamModels.csv";
 
+        public static string PrizesPath { get; } = @"C:\data\TournamentTracker\PrizeModels.csv";
+        public static string PersonsPath { get; } = @"C:\data\TournamentTracker\PersonModels.csv";
+        public static string TeamsPath { get; } = @"C:\data\TournamentTracker\TeamModels.csv";
+        
         public PersonModel CreatePerson(PersonModel model)
         {
             List<PersonModel> persons = PersonsPath.LoadFile().ConvertToPersonModels();
@@ -49,12 +50,13 @@ namespace TrackerLibrary.DataAccess
 
         public TeamModel CreateTeam(TeamModel model)
         {
-            List<TeamModel> teams=TeamPath.LoadFile().ConvertToTeamModel();
+            List<TeamModel> teams=TeamsPath.LoadFile().ConvertToTeamModel();
             int currentId = 1;
             if (teams.Count() > 0)
             {
-                currentId = teams.OrderByDescending(x => x.Id).First().Id + 1;
+              currentId = teams.OrderByDescending(x => x.Id).First().Id + 1;
             }
+            
             model.Id = currentId;
             teams.Add(model);
             teams.SaveToTeamFile(PersonsPath);
@@ -65,6 +67,11 @@ namespace TrackerLibrary.DataAccess
         public List<PersonModel> GetPerson_All()
         {
             return PersonsPath.LoadFile().ConvertToPersonModels();
+        }
+
+        public List<TeamModel> GetTeam_All()
+        {
+            throw new NotImplementedException();
         }
     }
 }

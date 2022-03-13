@@ -36,7 +36,7 @@
             this.selectTeamLabel = new System.Windows.Forms.Label();
             this.selectTeamDropDown = new System.Windows.Forms.ComboBox();
             this.createNewTeamLink = new System.Windows.Forms.LinkLabel();
-            this.tournamentPlayersListBox = new System.Windows.Forms.ListBox();
+            this.tournamentTeamsListBox = new System.Windows.Forms.ListBox();
             this.tournamentPlayersLabel = new System.Windows.Forms.Label();
             this.addTeamsButton = new System.Windows.Forms.Button();
             this.createPrizeButton = new System.Windows.Forms.Button();
@@ -122,16 +122,16 @@
             this.createNewTeamLink.TabStop = true;
             this.createNewTeamLink.Text = "Create New";
             // 
-            // tournamentPlayersListBox
+            // tournamentTeamsListBox
             // 
-            this.tournamentPlayersListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tournamentPlayersListBox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tournamentPlayersListBox.FormattingEnabled = true;
-            this.tournamentPlayersListBox.ItemHeight = 17;
-            this.tournamentPlayersListBox.Location = new System.Drawing.Point(294, 87);
-            this.tournamentPlayersListBox.Name = "tournamentPlayersListBox";
-            this.tournamentPlayersListBox.Size = new System.Drawing.Size(195, 121);
-            this.tournamentPlayersListBox.TabIndex = 16;
+            this.tournamentTeamsListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tournamentTeamsListBox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.tournamentTeamsListBox.FormattingEnabled = true;
+            this.tournamentTeamsListBox.ItemHeight = 17;
+            this.tournamentTeamsListBox.Location = new System.Drawing.Point(294, 87);
+            this.tournamentTeamsListBox.Name = "tournamentTeamsListBox";
+            this.tournamentTeamsListBox.Size = new System.Drawing.Size(195, 121);
+            this.tournamentTeamsListBox.TabIndex = 16;
             // 
             // tournamentPlayersLabel
             // 
@@ -157,6 +157,7 @@
             this.addTeamsButton.TabIndex = 18;
             this.addTeamsButton.Text = "Add Teams";
             this.addTeamsButton.UseVisualStyleBackColor = true;
+            this.addTeamsButton.Click += new System.EventHandler(this.addTeamsButton_Click);
             // 
             // createPrizeButton
             // 
@@ -187,6 +188,7 @@
             this.deleteSelectedPlayersButton.TabIndex = 20;
             this.deleteSelectedPlayersButton.Text = "Delete Selected";
             this.deleteSelectedPlayersButton.UseVisualStyleBackColor = true;
+            this.deleteSelectedPlayersButton.Click += new System.EventHandler(this.deleteSelectedPlayersButton_Click);
             // 
             // deleteSelectedPrizeButton
             // 
@@ -209,9 +211,9 @@
             this.prizesLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
             this.prizesLabel.Location = new System.Drawing.Point(294, 225);
             this.prizesLabel.Name = "prizesLabel";
-            this.prizesLabel.Size = new System.Drawing.Size(144, 30);
+            this.prizesLabel.Size = new System.Drawing.Size(67, 30);
             this.prizesLabel.TabIndex = 22;
-            this.prizesLabel.Text = "Teams/Players";
+            this.prizesLabel.Text = "Prizes";
             // 
             // prizesListBox
             // 
@@ -253,7 +255,7 @@
             this.Controls.Add(this.createPrizeButton);
             this.Controls.Add(this.addTeamsButton);
             this.Controls.Add(this.tournamentPlayersLabel);
-            this.Controls.Add(this.tournamentPlayersListBox);
+            this.Controls.Add(this.tournamentTeamsListBox);
             this.Controls.Add(this.createNewTeamLink);
             this.Controls.Add(this.selectTeamDropDown);
             this.Controls.Add(this.selectTeamLabel);
@@ -281,7 +283,7 @@
         private Label selectTeamLabel;
         private ComboBox selectTeamDropDown;
         private LinkLabel createNewTeamLink;
-        private ListBox tournamentPlayersListBox;
+        private ListBox tournamentTeamsListBox;
         private Label tournamentPlayersLabel;
         private Button addTeamsButton;
         private Button createPrizeButton;

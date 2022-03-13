@@ -19,9 +19,8 @@ namespace TrackerUI
         List<PersonModel>selectedTeamMembers=new List<PersonModel>();
         public CreateTeamForm()
         {
-            InitializeComponent();
-            
-            WireUpLists();
+            InitializeComponent();           
+            InitializeLists();
         }
         private void SampleData()
         {
@@ -31,7 +30,7 @@ namespace TrackerUI
             selectedTeamMembers.Add(new PersonModel() { FirstName = "mike", LastName = "lori" });
 
         }
-        private void WireUpLists()
+        private void InitializeLists()
         {
             selectTeamMemberDropDown.DataSource = null;
             selectTeamMemberDropDown.DataSource = availableTeamMembers;
@@ -54,7 +53,7 @@ namespace TrackerUI
 
                 p=GlobalConfig.Connection.CreatePerson(p);
                 selectedTeamMembers.Add(p);
-                WireUpLists();
+                InitializeLists();
 
                 firstNameValue.Text = "";
                 lastNameValue.Text = "";
@@ -89,7 +88,7 @@ namespace TrackerUI
             {
                 availableTeamMembers.Remove(p);
                 selectedTeamMembers.Add(p);
-                WireUpLists();
+                InitializeLists();
             }
            
         }
@@ -101,17 +100,32 @@ namespace TrackerUI
             {
                 selectedTeamMembers.Remove(p);
                 availableTeamMembers.Add(p);
-                WireUpLists();
+                InitializeLists();
             }
            
         }
 
         private void createTeamButton_Click(object sender, EventArgs e)
         {
-            TeamModel t=new TeamModel();
-            t.TeamName = teamNameValue.Text;
-            t.TeamMembers = selectedTeamMembers;
-            t=GlobalConfig.Connection.CreateTeam(t);
+            if (!(teamNameValue.Text.Length==0 || selectedTeamMembers.Count()<2))
+            {
+                TeamModel t = new TeamModel();
+                t.TeamName = teamNameValue.Text;
+                t.TeamMembers = selectedTeamMembers;
+                GlobalConfig.Connection.CreateTeam(t);
+                MessageBox.Show($"Team \"{t.TeamName}\" created successfully!");
+
+            }
+            else if(teamNameValue.Text.Length == 0)
+            {
+                MessageBox.Show("Team Name value can not be empty");              
+            }
+            else
+            {
+                MessageBox.Show("Team members count can not be less than 2");
+
+            }
+           
         }
     }
     

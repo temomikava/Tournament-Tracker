@@ -16,8 +16,7 @@ namespace TrackerLibrary.DataAccess.TextHelpers
     //Convert the prizes to list<string>
     //Save the list<string> to the text file
     public static class TextConnectorProcessor
-    {
-        
+    {             
         public static List<string> LoadFile(this string file)
         {
             if (!File.Exists(file))
@@ -26,6 +25,7 @@ namespace TrackerLibrary.DataAccess.TextHelpers
             }
             return File.ReadAllLines(file).ToList();
         }
+
         public static List<PrizeModel> ConvertToPrizeModels(this List<string> lines)
         {
             List<PrizeModel> output = new List<PrizeModel>();
@@ -72,10 +72,12 @@ namespace TrackerLibrary.DataAccess.TextHelpers
                 string[] personIds = columns[2].Split('|');
                 foreach (string id in personIds)
                 {
-                    t.TeamMembers.Add(persons.Where(x => x.Id == int.Parse(id)).First());
+                    if (id != "")
+                    {
+                       t.TeamMembers.Add(persons.Where(x => x.Id == int.Parse(id)).First());
+                    }
                 }
                 output.Add(t);
-
             }
             return output;
         }
@@ -103,10 +105,10 @@ namespace TrackerLibrary.DataAccess.TextHelpers
             List<string> lines = new List<string>();
             foreach(TeamModel t in models)
             {
-                lines.Add($"{ t.Id },{ t.TeamName },{ConvertPersonListToString(t.TeamMembers)}");
                 
+                lines.Add($"{ t.Id },{ t.TeamName },{ConvertPersonListToString(t.TeamMembers)}");              
             }
-            File.WriteAllLines(TextConnector.TeamPath, lines);
+            File.WriteAllLines(TextConnector.TeamsPath, lines);
         }
         private static string ConvertPersonListToString(List<PersonModel> persons)
         {

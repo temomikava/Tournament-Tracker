@@ -15,7 +15,7 @@ namespace TrackerLibrary.DataAccess
 {
     public class SqlConnector : IDataConnection
     {
-        string connectionString = "Server=DESKTOP-0LBLIAV;Database=Tournaments;Trusted_Connection=True;";
+        readonly string connectionString = "Server=DESKTOP-0LBLIAV;Database=Tournaments;Trusted_Connection=True;";
 
         public PersonModel CreatePerson(PersonModel model)
         {
@@ -84,6 +84,22 @@ namespace TrackerLibrary.DataAccess
             using(IDbConnection connection = new SqlConnection(connectionString))
             {
                 output = connection.Query<PersonModel>("dbo.spPeople_GetAll").ToList();
+            }
+            return output;
+        }
+
+        public List<TeamModel> GetTeam_All()
+        {
+            List<TeamModel> output;
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                output = connection.Query<TeamModel>("dbo.spTeams_GetAll").ToList();
+                foreach (TeamModel team in output)
+                {
+                    var p = new DynamicParameters();
+                    p.Add("@TeamID", team.Id);
+                    team.TeamMembers=connection.Query<PersonModel>("dbo.spTeammembers_GetByTeams",p, commandType: CommandType.StoredProcedure).ToList();
+                }
             }
             return output;
         }
