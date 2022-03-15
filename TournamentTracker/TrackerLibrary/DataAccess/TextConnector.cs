@@ -9,11 +9,12 @@ namespace TrackerLibrary.DataAccess
 {
     public class TextConnector : IDataConnection
     {
-
         internal static string PrizesPath { get; } = @"C:\data\TournamentTracker\PrizeModels.csv";
         internal static string PersonsPath { get; } = @"C:\data\TournamentTracker\PersonModels.csv";
         internal static string TeamsPath { get; } = @"C:\data\TournamentTracker\TeamModels.csv";
         internal static string TournamentsPath { get; } = @"C:\data\TournamentTracker\TournamentModels.csv";
+        internal static string MatchupsPath { get; } = @"C:\data\TournamentTracker\MatchupModels.csv";
+        internal static string MatChupEntriesPath { get; } = @"C:\data\TournamentTracker\MatchupEntryModels.csv";
 
 
         public PersonModel CreatePerson(PersonModel model)
@@ -76,9 +77,9 @@ namespace TrackerLibrary.DataAccess
             }
 
             model.Id = currentId;
+            model.SaveRoundsToFile(MatchupsPath, MatChupEntriesPath);
             Tournaments.Add(model);
-            Tournaments.SaveToTournamentsFile(TournamentsPath);
-            
+            Tournaments.SaveToTournamentsFile(TournamentsPath);           
         }
 
         public List<PersonModel> GetPerson_All()
