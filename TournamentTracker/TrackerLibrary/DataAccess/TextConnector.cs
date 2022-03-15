@@ -10,10 +10,12 @@ namespace TrackerLibrary.DataAccess
     public class TextConnector : IDataConnection
     {
 
-        public static string PrizesPath { get; } = @"C:\data\TournamentTracker\PrizeModels.csv";
-        public static string PersonsPath { get; } = @"C:\data\TournamentTracker\PersonModels.csv";
-        public static string TeamsPath { get; } = @"C:\data\TournamentTracker\TeamModels.csv";
-        
+        internal static string PrizesPath { get; } = @"C:\data\TournamentTracker\PrizeModels.csv";
+        internal static string PersonsPath { get; } = @"C:\data\TournamentTracker\PersonModels.csv";
+        internal static string TeamsPath { get; } = @"C:\data\TournamentTracker\TeamModels.csv";
+        internal static string TournamentsPath { get; } = @"C:\data\TournamentTracker\TournamentModels.csv";
+
+
         public PersonModel CreatePerson(PersonModel model)
         {
             List<PersonModel> persons = PersonsPath.LoadFile().ConvertToPersonModels();
@@ -24,7 +26,7 @@ namespace TrackerLibrary.DataAccess
             }
             model.Id = currentId;
             persons.Add(model);
-            persons.SaveToPersonFile(PersonsPath);
+            persons.SaveToPersonsFile(PersonsPath);
             return model;
         }
 
@@ -43,7 +45,7 @@ namespace TrackerLibrary.DataAccess
             Prizes.Add(model);
             //Convert the prizes to list<string>
             //Save the list<string> to the text file
-            Prizes.SaveToPrizeFile(PrizesPath);
+            Prizes.SaveToPrizesFile(PrizesPath);
 
             return model;
         }
@@ -59,14 +61,24 @@ namespace TrackerLibrary.DataAccess
             
             model.Id = currentId;
             teams.Add(model);
-            teams.SaveToTeamFile(PersonsPath);
+            teams.SaveToTeamsFile(PersonsPath);
             return model;
 
         }
 
-        public TournamentModel CreateTournament(TournamentModel model)
+        public void CreateTournament(TournamentModel model)
         {
-            throw new NotImplementedException();
+            List<TournamentModel> Tournaments = TournamentsPath.LoadFile().ConvertToTournamentModel();
+            int currentId = 1;
+            if (Tournaments.Count() > 0)
+            {
+                currentId = Tournaments.OrderByDescending(x => x.Id).First().Id + 1;
+            }
+
+            model.Id = currentId;
+            Tournaments.Add(model);
+            Tournaments.SaveToTournamentsFile(TournamentsPath);
+            
         }
 
         public List<PersonModel> GetPerson_All()

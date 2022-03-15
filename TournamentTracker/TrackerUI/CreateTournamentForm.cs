@@ -112,6 +112,9 @@ namespace TrackerUI
             tm.EntryFee=fee;
             tm.EnteredTeams = selectedTeams;
             tm.Prizes = selectedPrizes;
+
+            TournamentLogic.CreateRounds(tm);
+
             GlobalConfig.Connection.CreateTournament(tm);
         }
     }
