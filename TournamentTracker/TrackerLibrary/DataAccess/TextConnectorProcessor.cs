@@ -25,7 +25,6 @@ namespace TrackerLibrary.DataAccess.TextHelpers
             }
             return File.ReadAllLines(file).ToList();
         }
-
         public static List<PrizeModel> ConvertToPrizeModels(this List<string> lines)
         {
             //id,placeNumber,placeName,prizeAmount,prizePercentage
@@ -333,7 +332,12 @@ namespace TrackerLibrary.DataAccess.TextHelpers
             List<string> lines=new List<string>();
             foreach (TournamentModel tm in models)
             {
-                lines.Add($"{tm.Id},{tm.TournamentName},{ tm.EntryFee},{ ConvertTeamsListToString(tm.EnteredTeams)},{ ConvertPrizesListToString(tm.Prizes)},{ ConvertRoundsListToString(tm.Rounds)}");
+                lines.Add($"{tm.Id}," +
+                    $"{tm.TournamentName}," +
+                    $"{ tm.EntryFee}," +
+                    $"{ ConvertTeamsListToString(tm.EnteredTeams)}," +
+                    $"{ ConvertPrizesListToString(tm.Prizes)}," +
+                    $"{ ConvertRoundsListToString(tm.Rounds)}");
             }
             File.WriteAllLines(TextConnector.TournamentsPath, lines);
 
