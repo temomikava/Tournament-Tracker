@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using TrackerLibrary;
 using TrackerLibrary.Models;
 
 namespace TrackerUI
@@ -7,8 +8,7 @@ namespace TrackerUI
     {
         private TournamentModel tournament;
         BindingList<int>rounds=new BindingList<int>();
-        BindingList<MatchupModel> selectedMatchups=new BindingList<MatchupModel>();
-       
+        BindingList<MatchupModel> selectedMatchups = new BindingList<MatchupModel>();              
         public TournamentViewerForm(TournamentModel tournamentModel)
         {
             InitializeComponent();
@@ -26,8 +26,7 @@ namespace TrackerUI
             roundDropDown.DataSource = rounds;
             matchupListBox.DataSource = selectedMatchups;
             matchupListBox.DisplayMember = "DisplayName";
-        }
-       
+        }      
         private void LoadRounds()
         {
             rounds.Clear();
@@ -57,11 +56,31 @@ namespace TrackerUI
                     selectedMatchups.Clear();
                     foreach (MatchupModel m in matchups)
                     {
-                        selectedMatchups.Add(m);
+                        if (m.Winner == null || !unplayedOnlyCheckBox.Checked)
+                        {
+                            selectedMatchups.Add(m);
+                        }
                     }
                 }
             }
-            LoadMatchup(selectedMatchups.First());
+            if (selectedMatchups.Count > 0)
+            {
+                LoadMatchup(selectedMatchups.First());
+            }
+            DisplayMatchupInfo();
+        }
+        private void DisplayMatchupInfo()
+        {
+            bool isVisable=selectedMatchups.Count > 0;
+
+            teamOneName.Visible=isVisable;
+            teamOneScoreLabel.Visible=isVisable;
+            teamOneScoreValue.Visible=isVisable;
+            TeamTwoName.Visible=isVisable;
+            teamTwoScoreLabel.Visible=isVisable;
+            teamTwoScoreValue.Visible=isVisable;
+            scoreButton.Visible=isVisable;
+            versusLabel.Visible=isVisable;
         }
         private void LoadMatchup(MatchupModel m)
         {
@@ -75,13 +94,13 @@ namespace TrackerUI
                         {
                             teamOneName.Text = m.Entries[0].TeamCompeting.TeamName;
                             teamOneScoreValue.Text = m.Entries[0].Score.ToString();
+                            TeamTwoName.Text = "<bye>";
+                            teamTwoScoreValue.Text = "0";
                         }
                         else
                         {
                             teamOneName.Text = "not yet set";
-                            teamOneScoreValue.Text = "";
-                            TeamTwoName.Text = "<bye>";
-                            teamTwoScoreValue.Text = "0";
+                            teamOneScoreValue.Text = "";                          
                         }
                     }
                     if (i == 1)
@@ -103,6 +122,66 @@ namespace TrackerUI
         private void matchupListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadMatchup((MatchupModel)matchupListBox.SelectedItem);
+        }
+        private void unplayedOnlyCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            LoadMatchups((int)roundDropDown.SelectedItem);
+        }
+        private void scoreButton_Click(object sender, EventArgs e)
+        {
+            MatchupModel m = (MatchupModel)matchupListBox.SelectedItem;
+            double teamOneScore = 0;
+            double teamTwoScore = 0;
+            for (int i = 0; i < m.Entries.Count; i++)
+            {
+                if (i == 0)
+                {
+                    if (m.Entries[0].TeamCompeting != null)
+                    {
+                        bool scoreValid = double.TryParse(teamOneScoreValue.Text, out teamOneScore);
+                        m.Entries[0].Score = teamOneScore;
+                    }
+                }
+                if (i == 1)
+                {
+                    if (m.Entries[0].TeamCompeting != null)
+                    {
+                        bool scoreValid = double.TryParse(teamTwoScoreValue.Text, out teamTwoScore);
+                        m.Entries[1].Score = teamTwoScore;
+                    }
+                }
+            }
+            if (teamOneScore>teamTwoScore)
+            {
+                m.Winner = m.Entries[0].TeamCompeting;
+            }
+            else if (teamOneScore < teamTwoScore)
+            {
+                m.Winner = m.Entries[1].TeamCompeting;
+            }
+            else
+            {
+                MessageBox.Show("I don't handle tie games");
+            }
+            foreach (List<MatchupModel> rounds in tournament.Rounds)
+            {
+                foreach (MatchupModel rm in rounds)
+                {
+                    foreach (MatchupEntryModel me in rm.Entries)
+                    {
+                        if (me.ParentMatchup!=null)
+                        {
+                            if (me.ParentMatchup.Id == m.Id)
+                            {
+                                me.TeamCompeting = m.Winner;
+                                GlobalConfig.Connection.UpdateMatchup(rm);
+                            }
+                        }
+                    }
+                }
+            }
+            LoadMatchups((int)roundDropDown.SelectedItem);
+            GlobalConfig.Connection.UpdateMatchup(m);
         }
     }
 }
