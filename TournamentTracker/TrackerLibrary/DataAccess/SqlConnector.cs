@@ -242,8 +242,7 @@ namespace TrackerLibrary.DataAccess
                             {
                                 me.ParentMatchup=matchups.Where(x=>x.Id==me.ParentMatchupId).First();
                             }
-                        }
-                        
+                        }                     
                     }
                     List<MatchupModel> currRow = new List<MatchupModel>();
                     int currtRound = 1;
@@ -255,10 +254,10 @@ namespace TrackerLibrary.DataAccess
                             currRow=new List<MatchupModel>();
                             currtRound++;
                         }
+                        currRow.Add(m);
                     }
                     t.Rounds.Add(currRow);
                 }
-
             }
             return output;
         }
