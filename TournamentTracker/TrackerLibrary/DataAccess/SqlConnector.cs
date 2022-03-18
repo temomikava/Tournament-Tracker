@@ -17,7 +17,7 @@ namespace TrackerLibrary.DataAccess
     {
         readonly string connectionString = "Server=DESKTOP-0LBLIAV;Database=Tournaments;Trusted_Connection=True;";
 
-        public PersonModel CreatePerson(PersonModel model)
+        public void CreatePerson(PersonModel model)
         {
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
@@ -30,7 +30,7 @@ namespace TrackerLibrary.DataAccess
 
                 connection.Execute("spPeople_Insert", p, commandType: CommandType.StoredProcedure);
                 model.Id = p.Get<int>("@ID");
-                return model;
+                
             }
         }
 
@@ -40,7 +40,7 @@ namespace TrackerLibrary.DataAccess
         /// <param name="model">The prize information.</param>
         /// <returns>Prize information including the unique identifier</returns>
 
-        public PrizeModel CreatePrize(PrizeModel model)
+        public void CreatePrize(PrizeModel model)
         {
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
@@ -53,11 +53,11 @@ namespace TrackerLibrary.DataAccess
 
                 connection.Execute("spPrizes_Insert", p, commandType: CommandType.StoredProcedure);
                 model.Id = p.Get<int>("@ID");
-                return model;
+                
             }
             
         }
-        public TeamModel CreateTeam(TeamModel model)
+        public void CreateTeam(TeamModel model)
         {
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
@@ -73,7 +73,6 @@ namespace TrackerLibrary.DataAccess
                     p.Add("@PersonID", tm.Id);
                     connection.Execute("spTeamMembers_Insert", p, commandType: CommandType.StoredProcedure);
                 }
-                return model;
             }
         }
         public void CreateTournament(TournamentModel model)
@@ -84,6 +83,8 @@ namespace TrackerLibrary.DataAccess
                 SaveTournamentPrizes(connection, model);
                 SaveTournamentEntries(connection, model);
                 SaveTournamentRounds(connection, model);
+                TournamentLogic.UpdateTournamentResults(model);
+
             }
         }
         private void SaveTournaments(IDbConnection connection, TournamentModel model)

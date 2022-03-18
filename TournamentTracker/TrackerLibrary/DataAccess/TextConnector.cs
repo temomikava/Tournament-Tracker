@@ -17,7 +17,7 @@ namespace TrackerLibrary.DataAccess
         internal static string MatChupEntriesPath { get; } = @"C:\data\TournamentTracker\MatchupEntryModels.csv";
 
 
-        public PersonModel CreatePerson(PersonModel model)
+        public void CreatePerson(PersonModel model)
         {
             List<PersonModel> persons = PersonsPath.LoadFile().ConvertToPersonModels();
             int currentId = 1;
@@ -28,10 +28,10 @@ namespace TrackerLibrary.DataAccess
             model.Id = currentId;
             persons.Add(model);
             persons.SaveToPersonsFile(PersonsPath);
-            return model;
+           
         }
 
-        public PrizeModel CreatePrize(PrizeModel model)
+        public void CreatePrize(PrizeModel model)
         {
             //Load the text file and convert the text to List<PrizeModel>
             List<PrizeModel> Prizes=PrizesPath.LoadFile().ConvertToPrizeModels();
@@ -48,10 +48,10 @@ namespace TrackerLibrary.DataAccess
             //Save the list<string> to the text file
             Prizes.SaveToPrizesFile(PrizesPath);
 
-            return model;
+            
         }
 
-        public TeamModel CreateTeam(TeamModel model)
+        public void CreateTeam(TeamModel model)
         {
             List<TeamModel> teams=TeamsPath.LoadFile().ConvertToTeamModel();
             int currentId = 1;
@@ -63,7 +63,7 @@ namespace TrackerLibrary.DataAccess
             model.Id = currentId;
             teams.Add(model);
             teams.SaveToTeamsFile(PersonsPath);
-            return model;
+           
 
         }
 
@@ -79,7 +79,9 @@ namespace TrackerLibrary.DataAccess
             model.Id = currentId;
             model.SaveRoundsToFile(MatchupsPath, MatChupEntriesPath);
             Tournaments.Add(model);
-            Tournaments.SaveToTournamentsFile(TournamentsPath);           
+            Tournaments.SaveToTournamentsFile(TournamentsPath);
+            TournamentLogic.UpdateTournamentResults(model);
+
         }
 
         public List<PersonModel> GetPerson_All()
