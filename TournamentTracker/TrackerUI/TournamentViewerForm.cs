@@ -127,27 +127,40 @@ namespace TrackerUI
         {
             LoadMatchups((int)roundDropDown.SelectedItem);
         }
+        private string IsValidData()
+        {
+            bool scoreOneValid = double.TryParse(teamOneScoreValue.Text, out double teamOneScore);
+            bool scoreTwoValid = double.TryParse(teamTwoScoreValue.Text, out double teamTwoScore);
+
+            string output = !scoreOneValid ? "Score one value is not a valid number" : 
+                !scoreTwoValid ? "Score Two value is not a valid number" :
+                (teamOneScore == 0 && teamTwoScore == 0) ? "you did not enter a score for either team" :
+                teamOneScore == teamTwoScore ? "we don't allow ties in this application" : "";
+            return output;
+        }
         private void scoreButton_Click(object sender, EventArgs e)
         {
-            MatchupModel m = (MatchupModel)matchupListBox.SelectedItem;
-            double teamOneScore = 0;
-            double teamTwoScore = 0;
+            string errorMessage = IsValidData();
+            if (errorMessage.Length>0)
+            {
+                MessageBox.Show(errorMessage);
+                return;
+            }
+            MatchupModel m = (MatchupModel)matchupListBox.SelectedItem;           
             for (int i = 0; i < m.Entries.Count; i++)
             {
                 if (i == 0)
                 {
                     if (m.Entries[0].TeamCompeting != null)
                     {
-                        bool scoreValid = double.TryParse(teamOneScoreValue.Text, out teamOneScore);
-                        m.Entries[0].Score = teamOneScore;
+                        m.Entries[0].Score = double.Parse(teamOneScoreValue.Text); ;
                     }
                 }
                 if (i == 1)
                 {
                     if (m.Entries[0].TeamCompeting != null)
                     {
-                        bool scoreValid = double.TryParse(teamTwoScoreValue.Text, out teamTwoScore);
-                        m.Entries[1].Score = teamTwoScore;
+                        m.Entries[1].Score = double.Parse(teamTwoScoreValue.Text);
                     }
                 }
             }

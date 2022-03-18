@@ -114,7 +114,7 @@ namespace TrackerUI
             tm.Prizes = selectedPrizes;
 
             TournamentLogic.CreateRounds(tm);
-
+            tm.AlertUsersToNewRound();
             GlobalConfig.Connection.CreateTournament(tm);
             TournamentViewerForm tvf = new TournamentViewerForm(tm);
             tvf.Show();
