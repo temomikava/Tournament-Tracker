@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TrackerLibrary.Models
+﻿namespace TrackerLibrary.Models
 {
     /// <summary>
     /// Represents one tournament, with all of the rounds, prizes and outcomes
@@ -26,7 +20,7 @@ namespace TrackerLibrary.Models
         /// <summary>
         /// The set of teams that have been entered
         /// </summary>
-        public List<TeamModel>EnteredTeams { get; set; }= new List<TeamModel>();
+        public List<TeamModel> EnteredTeams { get; set; } = new List<TeamModel>();
         /// <summary>
         /// The list of prizes for the various places
         /// </summary>

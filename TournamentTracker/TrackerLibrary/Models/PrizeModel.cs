@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TrackerLibrary.Models
+﻿namespace TrackerLibrary.Models
 {
     /// <summary>
     /// Represents what the prize is for the given place.
@@ -32,6 +26,6 @@ namespace TrackerLibrary.Models
         /// take or zero if it is not used. It is a fraction of 1 (so 0.5 for 50%)
         /// </summary>
         public double PrizePercentage { get; set; }
-       
+
     }
 }

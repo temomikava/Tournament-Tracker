@@ -1,32 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using TrackerLibrary;
+﻿using TrackerLibrary;
 using TrackerLibrary.Models;
 
 namespace TrackerUI
 {
-    
+
     public partial class CreateTeamForm : Form
     {
         List<PersonModel> availableTeamMembers = GlobalConfig.Connection.GetPerson_All();
-        List<PersonModel>selectedTeamMembers=new List<PersonModel>();
+        List<PersonModel> selectedTeamMembers = new List<PersonModel>();
         ITeamRequestor callingForm;
-        public CreateTeamForm(ITeamRequestor caller )
+        public CreateTeamForm(ITeamRequestor caller)
         {
-            InitializeComponent(); 
+            InitializeComponent();
             callingForm = caller;
             InitializeLists();
         }
         private void SampleData()
         {
-            availableTeamMembers.Add(new PersonModel() { FirstName = "temo", LastName="mika" });
+            availableTeamMembers.Add(new PersonModel() { FirstName = "temo", LastName = "mika" });
             availableTeamMembers.Add(new PersonModel() { FirstName = "gio", LastName = "kika" });
             selectedTeamMembers.Add(new PersonModel() { FirstName = "lore", LastName = "pasa" });
             selectedTeamMembers.Add(new PersonModel() { FirstName = "mike", LastName = "lori" });
@@ -85,31 +76,31 @@ namespace TrackerUI
 
         private void addMemberButton_Click(object sender, EventArgs e)
         {
-            PersonModel p=(PersonModel)selectTeamMemberDropDown.SelectedItem;
+            PersonModel p = (PersonModel)selectTeamMemberDropDown.SelectedItem;
             if (p != null)
             {
                 availableTeamMembers.Remove(p);
                 selectedTeamMembers.Add(p);
                 InitializeLists();
             }
-           
+
         }
 
         private void removeSelectedmemberButton_Click(object sender, EventArgs e)
         {
             PersonModel p = (PersonModel)teamMembersListBox.SelectedItem;
-            if (p!=null)
+            if (p != null)
             {
                 selectedTeamMembers.Remove(p);
                 availableTeamMembers.Add(p);
                 InitializeLists();
             }
-           
+
         }
 
         private void createTeamButton_Click(object sender, EventArgs e)
         {
-            if (!(teamNameValue.Text.Length==0 || selectedTeamMembers.Count()<2))
+            if (!(teamNameValue.Text.Length == 0 || selectedTeamMembers.Count() < 2))
             {
                 TeamModel t = new TeamModel();
                 t.TeamName = teamNameValue.Text;
@@ -121,17 +112,17 @@ namespace TrackerUI
                 Close();
 
             }
-            else if(teamNameValue.Text.Length == 0)
+            else if (teamNameValue.Text.Length == 0)
             {
-                MessageBox.Show("Team Name value can not be empty");              
+                MessageBox.Show("Team Name value can not be empty");
             }
             else
             {
                 MessageBox.Show("Team members count can not be less than 2");
 
             }
-           
+
         }
     }
-    
+
 }

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TrackerLibrary.DataAccess.TextHelpers;
 using TrackerLibrary.Models;
-using TrackerLibrary.DataAccess.TextHelpers;
 namespace TrackerLibrary.DataAccess
 {
     public class TextConnector : IDataConnection
@@ -28,42 +23,42 @@ namespace TrackerLibrary.DataAccess
             model.Id = currentId;
             persons.Add(model);
             persons.SaveToPersonsFile(PersonsPath);
-           
+
         }
 
         public void CreatePrize(PrizeModel model)
         {
             //Load the text file and convert the text to List<PrizeModel>
-            List<PrizeModel> Prizes=PrizesPath.LoadFile().ConvertToPrizeModels();
+            List<PrizeModel> Prizes = PrizesPath.LoadFile().ConvertToPrizeModels();
             //Find the max ID
             int currentId = 1;
-            if (Prizes.Count()>0)
+            if (Prizes.Count() > 0)
             {
-                currentId= Prizes.OrderByDescending(x => x.Id).First().Id + 1;
+                currentId = Prizes.OrderByDescending(x => x.Id).First().Id + 1;
             }
-            model.Id=currentId;
+            model.Id = currentId;
             //Add the new record with the new ID(ID=max+1)
             Prizes.Add(model);
             //Convert the prizes to list<string>
             //Save the list<string> to the text file
             Prizes.SaveToPrizesFile(PrizesPath);
 
-            
+
         }
 
         public void CreateTeam(TeamModel model)
         {
-            List<TeamModel> teams=TeamsPath.LoadFile().ConvertToTeamModel();
+            List<TeamModel> teams = TeamsPath.LoadFile().ConvertToTeamModel();
             int currentId = 1;
             if (teams.Count() > 0)
             {
-              currentId = teams.OrderByDescending(x => x.Id).First().Id + 1;
+                currentId = teams.OrderByDescending(x => x.Id).First().Id + 1;
             }
-            
+
             model.Id = currentId;
             teams.Add(model);
             teams.SaveToTeamsFile(PersonsPath);
-           
+
 
         }
 
@@ -91,7 +86,7 @@ namespace TrackerLibrary.DataAccess
 
         public List<TeamModel> GetTeam_All()
         {
-           return  TeamsPath.LoadFile().ConvertToTeamModel();
+            return TeamsPath.LoadFile().ConvertToTeamModel();
         }
 
         public List<TournamentModel> GetTournament_All()

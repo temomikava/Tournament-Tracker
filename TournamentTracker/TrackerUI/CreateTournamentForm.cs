@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using TrackerLibrary;
+﻿using TrackerLibrary;
 using TrackerLibrary.Models;
 
 namespace TrackerUI
 {
-    public partial class CreateTournamentForm : Form, IPrizeRequestor,ITeamRequestor
+    public partial class CreateTournamentForm : Form, IPrizeRequestor, ITeamRequestor
     {
-        List<TeamModel> availableTeams=GlobalConfig.Connection.GetTeam_All();
-        List<TeamModel> selectedTeams=new List<TeamModel>();
-        List<PrizeModel> selectedPrizes=new List<PrizeModel>();
+        List<TeamModel> availableTeams = GlobalConfig.Connection.GetTeam_All();
+        List<TeamModel> selectedTeams = new List<TeamModel>();
+        List<PrizeModel> selectedPrizes = new List<PrizeModel>();
         public CreateTournamentForm()
         {
             InitializeComponent();
@@ -80,19 +71,19 @@ namespace TrackerUI
 
         private void createNewTeamLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            CreateTeamForm form=new CreateTeamForm(this);
+            CreateTeamForm form = new CreateTeamForm(this);
             form.Show();
         }
 
         private void removeSelectedPrizeButton_Click(object sender, EventArgs e)
         {
             PrizeModel p = (PrizeModel)prizesListBox.SelectedItem;
-            if(p != null)
+            if (p != null)
             {
                 selectedPrizes.Remove(p);
                 InitializeLists();
             }
-            
+
         }
 
         private void createTournamentButton_Click(object sender, EventArgs e)
@@ -101,15 +92,15 @@ namespace TrackerUI
             bool FeeAcceptablee = decimal.TryParse(entryFeeValue.Text, out fee);
             if (!FeeAcceptablee)
             {
-                MessageBox.Show("You need to enter a valid entry fee", 
+                MessageBox.Show("You need to enter a valid entry fee",
                     "Invalid Fee",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 return;
             }
-            TournamentModel tm=new TournamentModel();
-            tm.TournamentName=tournamentNameValue.Text;
-            tm.EntryFee=fee;
+            TournamentModel tm = new TournamentModel();
+            tm.TournamentName = tournamentNameValue.Text;
+            tm.EntryFee = fee;
             tm.EnteredTeams = selectedTeams;
             tm.Prizes = selectedPrizes;
 

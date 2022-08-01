@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TrackerLibrary.Models
+﻿namespace TrackerLibrary.Models
 {
     /// <summary>
     /// Represents one match in the tournament.
@@ -38,7 +32,7 @@ namespace TrackerLibrary.Models
                 string output = "";
                 foreach (MatchupEntryModel entry in Entries)
                 {
-                    if (entry.TeamCompeting!=null)
+                    if (entry.TeamCompeting != null)
                     {
                         if (output.Length == 0)
                         {

@@ -7,8 +7,8 @@ namespace TrackerUI
     public partial class TournamentViewerForm : Form
     {
         private TournamentModel tournament;
-        BindingList<int>rounds=new BindingList<int>();
-        BindingList<MatchupModel> selectedMatchups = new BindingList<MatchupModel>();              
+        BindingList<int> rounds = new BindingList<int>();
+        BindingList<MatchupModel> selectedMatchups = new BindingList<MatchupModel>();
         public TournamentViewerForm(TournamentModel tournamentModel)
         {
             InitializeComponent();
@@ -26,7 +26,7 @@ namespace TrackerUI
             roundDropDown.DataSource = rounds;
             matchupListBox.DataSource = selectedMatchups;
             matchupListBox.DisplayMember = "DisplayName";
-        }      
+        }
         private void LoadRounds()
         {
             rounds.Clear();
@@ -34,9 +34,9 @@ namespace TrackerUI
             int currRound = 1;
             foreach (List<MatchupModel> matchups in tournament.Rounds)
             {
-                if (matchups.First().MatchupRound>currRound)
+                if (matchups.First().MatchupRound > currRound)
                 {
-                    currRound= matchups.First().MatchupRound;
+                    currRound = matchups.First().MatchupRound;
                     rounds.Add(currRound);
                 }
             }
@@ -71,20 +71,20 @@ namespace TrackerUI
         }
         private void DisplayMatchupInfo()
         {
-            bool isVisable=selectedMatchups.Count > 0;
+            bool isVisable = selectedMatchups.Count > 0;
 
-            teamOneName.Visible=isVisable;
-            teamOneScoreLabel.Visible=isVisable;
-            teamOneScoreValue.Visible=isVisable;
-            TeamTwoName.Visible=isVisable;
-            teamTwoScoreLabel.Visible=isVisable;
-            teamTwoScoreValue.Visible=isVisable;
-            scoreButton.Visible=isVisable;
-            versusLabel.Visible=isVisable;
+            teamOneName.Visible = isVisable;
+            teamOneScoreLabel.Visible = isVisable;
+            teamOneScoreValue.Visible = isVisable;
+            TeamTwoName.Visible = isVisable;
+            teamTwoScoreLabel.Visible = isVisable;
+            teamTwoScoreValue.Visible = isVisable;
+            scoreButton.Visible = isVisable;
+            versusLabel.Visible = isVisable;
         }
         private void LoadMatchup(MatchupModel m)
         {
-            if (m!=null)
+            if (m != null)
             {
                 for (int i = 0; i < m.Entries.Count; i++)
                 {
@@ -100,7 +100,7 @@ namespace TrackerUI
                         else
                         {
                             teamOneName.Text = "not yet set";
-                            teamOneScoreValue.Text = "";                          
+                            teamOneScoreValue.Text = "";
                         }
                     }
                     if (i == 1)
@@ -132,7 +132,7 @@ namespace TrackerUI
             bool scoreOneValid = double.TryParse(teamOneScoreValue.Text, out double teamOneScore);
             bool scoreTwoValid = double.TryParse(teamTwoScoreValue.Text, out double teamTwoScore);
 
-            string output = !scoreOneValid ? "Score one value is not a valid number" : 
+            string output = !scoreOneValid ? "Score one value is not a valid number" :
                 !scoreTwoValid ? "Score Two value is not a valid number" :
                 (teamOneScore == 0 && teamTwoScore == 0) ? "you did not enter a score for either team" :
                 teamOneScore == teamTwoScore ? "we don't allow ties in this application" : "";
@@ -141,12 +141,12 @@ namespace TrackerUI
         private void scoreButton_Click(object sender, EventArgs e)
         {
             string errorMessage = IsValidData();
-            if (errorMessage.Length>0)
+            if (errorMessage.Length > 0)
             {
                 MessageBox.Show(errorMessage);
                 return;
             }
-            MatchupModel m = (MatchupModel)matchupListBox.SelectedItem;           
+            MatchupModel m = (MatchupModel)matchupListBox.SelectedItem;
             for (int i = 0; i < m.Entries.Count; i++)
             {
                 if (i == 0)
@@ -164,7 +164,7 @@ namespace TrackerUI
                     }
                 }
             }
-            
+
             TournamentLogic.UpdateTournamentResults(tournament);
             GlobalConfig.Connection.UpdateMatchup(m);
         }
